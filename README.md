@@ -63,7 +63,6 @@ It provides ready‑to‑use numerical code, allowing users to experiment with f
 
 ## 🖼️ Visuals & Examples
 
-Place your images in `images/` and update the file names below.
 
 ```
 ![Model Architecture](images/model_architecture.png)
@@ -99,7 +98,7 @@ Place your images in `images/` and update the file names below.
 Clone the repo and set up the Python environment:
 
 ```bash
-git clone https://github.com/SatyamKumar457/Modeling-the-Impact-of-AI-and-Automation-on-Companies-and-Workforce-using-Fractional-Order-Dynamics.git
+git clone https://github.com/HarshitPranjal/Modeling-the-Impact-of-AI-and-Automation-on-Companies-and-Workforce-using-Fractional-Order-Dynamics.git
 cd Modeling-the-Impact-of-AI-and-Automation-on-Companies-and-Workforce-using-Fractional-Order-Dynamics
 python3 -m venv venv
 source venv/bin/activate
@@ -162,4 +161,3 @@ MIT License
 
 ---
 
-If you want this committed to `README.md` in the repo, paste the output of `ls -R` (or the image file list) and I will generate a final file ready to commit.
