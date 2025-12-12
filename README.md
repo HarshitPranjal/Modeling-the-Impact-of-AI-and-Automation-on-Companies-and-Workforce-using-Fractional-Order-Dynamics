@@ -61,18 +61,6 @@ It provides ready‑to‑use numerical code, allowing users to experiment with f
 
 ---
 
-## 🖼️ Visuals & Examples
-
-
-```
-![Model Architecture](Graphs/Convergence/Convergence_1.png)
-![Fractional vs Classical Dynamics](images/dynamics_compare.png)
-![PINN Loss Convergence](images/pinn_loss.png)
-![Layoff Forecast Output](images/forecast_layoffs.png)
-![Parameter Sensitivity Heatmaps](images/heatmap_sensitivity.png)
-```
-
----
 
 ## 📁 Repository Structure (Suggested)
 
