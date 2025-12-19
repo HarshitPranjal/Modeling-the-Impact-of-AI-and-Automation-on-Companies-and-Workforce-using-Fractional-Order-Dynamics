@@ -1,0 +1,130 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sigma0      = 0.373795
+gamma0      = 0.112501
+muA        = 0.127315
+Lambda     = 2.969900
+betaC0      = 0.781300
+muC        = 0.543700
+s0          = 0.886456
+zeta0       = 0.168300
+eta0        = 0.280660
+muE        = 0.351900
+kappa      = 0.131081
+mu0        = 0.181464
+alpha      = 0.739
+lam        = 1.999900
+
+# ------------------------------
+# Basic Innovation Number I0
+# ------------------------------
+def innovation_number(sigma, gamma, eta, s):
+    numerator = sigma * (eta + muE) * Lambda
+    denominator = gamma * s * Lambda + muA * muC * (eta + muE)
+    return numerator / denominator
+
+
+# ------------------------------
+# Equilibrium Company Capacity C*
+# ------------------------------
+def company_equilibrium(I0, betaC):
+    # K factor from the paper
+    K = (Lambda * gamma0 * s0 + muA * muC * (eta0 + muE)) \
+        / (Lambda * gamma0 * zeta0 + betaC * muA * (eta0 + muE))
+    return Lambda / (muC + (I0 - 1) * K * betaC)
+
+
+# ------------------------------
+# Equilibrium Entrepreneurship E_p*
+# ------------------------------
+def entrepreneurship_equilibrium(I0, betaC, eta, kappa):
+    K = (Lambda * gamma0 * s0 + muA * muC * (eta0 + muE)) \
+        / (Lambda * gamma0 * zeta0 + betaC * muA * (eta0 + muE))
+    C_star = Lambda / (muC + (I0 - 1) * K * betaC)
+    E_p = (1 / mu0) * (C_star * (eta * sigma0 / gamma0 + gamma0) - eta * muA / gamma0)
+    return E_p
+
+
+# ------------------------------
+# General Heatmap Function
+# ------------------------------
+def plot_heatmap(X, Y, Z, title, xlabel, ylabel):
+    plt.figure(figsize=(7, 6))
+    sns.heatmap(Z, cmap="viridis", xticklabels=False, yticklabels=False)
+    plt.title(title, fontsize=14)
+    plt.xlabel(xlabel, fontsize=12)
+    plt.ylabel(ylabel, fontsize=12)
+    plt.tight_layout()
+    plt.show()
+
+
+# ------------------------------
+# Heatmap 1: (σ, γ) vs I0
+# ------------------------------
+sigma_vals = np.linspace(0.1, 1.0, 50)
+gamma_vals = np.linspace(0.05, 0.5, 50)
+
+H1 = np.zeros((50, 50))
+
+for i, sgm in enumerate(sigma_vals):
+    for j, gmm in enumerate(gamma_vals):
+        H1[j, i] = innovation_number(sgm, gmm, eta0, s0)
+
+plot_heatmap(sigma_vals, gamma_vals, H1,
+             "Heatmap 1: Impact of (σ, γ) on I₀",
+             "σ (Automation Diffusion)", "γ (Displacement Rate)")
+
+
+# ------------------------------
+# Heatmap 2: (η, s) vs I0
+# ------------------------------
+eta_vals = np.linspace(0.1, 1.0, 50)
+s_vals = np.linspace(0.1, 1.5, 50)
+
+H2 = np.zeros((50, 50))
+
+for i, et in enumerate(eta_vals):
+    for j, ss in enumerate(s_vals):
+        H2[j, i] = innovation_number(sigma0, gamma0, et, ss)
+
+plot_heatmap(eta_vals, s_vals, H2,
+             "Heatmap 2: Impact of (η, s) on I₀",
+             "η (Entrepreneur Transition)", "s (Hiring Rate)")
+
+
+# ------------------------------
+# Heatmap 3: (ζ, βC) vs C*
+# ------------------------------
+zeta_vals = np.linspace(0.05, 1.0, 50)
+beta_vals = np.linspace(0.2, 1.2, 50)
+
+H3 = np.zeros((50, 50))
+
+for i, zt in enumerate(zeta_vals):
+    for j, bc in enumerate(beta_vals):
+        I0_value = innovation_number(sigma0, gamma0, eta0, s0)
+        H3[j, i] = company_equilibrium(I0_value, bc)
+
+plot_heatmap(zeta_vals, beta_vals, H3,
+             "Heatmap 3: Impact of (ζ, β₍C₎) on C*",
+             "ζ (Upskilling Rate)", "β₍C₎ (Automation Pressure on Companies)")
+
+
+# ------------------------------
+# Heatmap 4: (η, κ) vs E_p*
+# ------------------------------
+eta_vals = np.linspace(0.1, 1.0, 50)
+kappa_vals = np.linspace(0.05, 0.6, 50)
+
+H4 = np.zeros((50, 50))
+
+for i, et in enumerate(eta_vals):
+    for j, kp in enumerate(kappa_vals):
+        I0_value = innovation_number(sigma0, gamma0, et, s0)
+        H4[j, i] = entrepreneurship_equilibrium(I0_value, betaC0, et, kp)
+
+plot_heatmap(eta_vals, kappa_vals, H4,
+             "Heatmap 4: Impact of (η, κ) on Eₚ*",
+             "η (Reskilling → Entrepreneurship)", "κ (Company → Entrepreneurship)")
